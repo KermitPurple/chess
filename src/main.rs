@@ -1,5 +1,10 @@
-use pieces;
+pub mod pieces;
+use pieces::*;
 
 fn main() {
-    println!("Hello, world!");
+    let p = Piece {
+        team: PieceTeam::Black,
+        typ: PieceType::Pawn,
+    };
+    println!("{p}");
 }
