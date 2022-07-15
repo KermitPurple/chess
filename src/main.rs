@@ -1,4 +1,3 @@
-// TODO check_maker and check_freeer
 pub mod pieces;
 use pieces::*;
 
