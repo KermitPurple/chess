@@ -63,7 +63,7 @@ impl Board {
 
     fn valid_move(&self, a: (usize, usize), b: (usize, usize)) -> bool {
         macro_rules! rel_posns {
-            ($list:expr) => ({
+            ($list:expr) => {{
                 for (x, y) in [(1, 2), (2, 1)] {
                     if (a.0 + x == b.0 && a.1 + y == b.1)
                         || (a.0.checked_sub(x).map(|n| n == b.0).unwrap_or(false)
@@ -73,28 +73,25 @@ impl Board {
                     }
                 }
                 false
-            })
+            }};
         }
         macro_rules! check {
-            (Rook) => ((a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions"));
-            (Bishop) => ({
+            (Rook) => {
+                (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
+            };
+            (Bishop) => {{
                 let diff = (
-                    if a.0 > b.0 {
-                        a.0 - b.0
-                    } else {
-                        b.0 - a.0 
-                    },
-                    if a.1 > b.1 {
-                        a.1 - b.1
-                    } else {
-                        b.1 - a.1 
-                    }
-                    );
+                    if a.0 > b.0 { a.0 - b.0 } else { b.0 - a.0 },
+                    if a.1 > b.1 { a.1 - b.1 } else { b.1 - a.1 },
+                );
                 diff.0 == diff.1 && todo!("Ensure no collisions")
-            });
-            (Queen) => (check!(Rook) && check!(Bishop));
+            }};
+            (Queen) => {
+                check!(Rook) && check!(Bishop)
+            };
         }
-        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) { return false;
+        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) {
+            return false;
         }
         match (self.board[a.1][a.0], self.board[b.1][b.0]) {
             (Some(p1), Some(p2)) => {
