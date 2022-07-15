@@ -138,11 +138,19 @@ mod tests {
         let b = Board::new();
         assert!(b.valid_move(
             (1, 7), // Black left knight
-            (2, 5), // Up two right 1
+            (2, 5), // Up two right one
         ));
         assert!(b.valid_move(
             (1, 7), // Black left knight
-            (0, 5), // Up two right 1
+            (0, 5), // Up two left one
+        ));
+        assert!(b.valid_move(
+            (6, 7), // Black right knight
+            (7, 5), // Up two right one
+        ));
+        assert!(b.valid_move(
+            (6, 7), // Black right knight
+            (5, 5), // Up two left one
         ));
     }
  
