@@ -593,6 +593,34 @@ mod tests {
         assert!(b.in_check(Color::White));
         assert!(!b.in_check(Color::Black));
     }
+
+    #[test]
+    fn put_self_in_check() {
+        let b = Board {
+            board: [
+                [
+                    Some(Piece::new(Color::White, PieceType::King)),
+                    Some(Piece::new(Color::White, PieceType::Queen)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::Queen)),
+                    Some(Piece::new(Color::Black, PieceType::King)),
+                ],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            ..Default::default()
+        };
+        assert!(!b.valid_move((1, 0), (1, 1)));
+        assert!(!b.valid_move((6, 0), (6, 1)));
+    }
 }
 
 fn main() {}
