@@ -64,15 +64,42 @@ impl Board {
         }
     }
 
-    fn valid_move(&self, a: Position, b: Position) -> bool {
-        /// Given a list of relative positions check if the move to be checked is one of those positions
-        macro_rules! rel_posns {
-            ($list:expr) => {
-                ($list)
-                    .iter()
-                    .any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1)))
-            };
+    fn in_check(&self, color: Color) -> bool {
+        let range = match color {
+            Color::Black => 0..=7,
+            Color::White => 7..=0,
+        };
+        let king = 'outer: loop {
+            for y in range {
+                for x in 0..8 {
+                    if matches!(
+                        self.board[y][x],
+                        Some(Piece { color: c, typ: PieceType::King, .. }) if color == c
+                    ) {
+                        break 'outer (x, y);
+                    }
+                }
+            }
+            panic!("Couln't find king!");
+        };
+        for y in 0..8 {
+            for x in 0..8 {
+                if self.valid_move((x, y), king) {
+                    return true;
+                }
+            }
         }
+        false
+    } 
+
+    /// Given a list of relative positions check if the move to be checked is one of those positions
+    fn rel_posns(self, list: &[Position], a: Position, b: Position) -> bool {
+        list
+            .iter()
+            .any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1)))
+    }
+
+    fn valid_move(&self, a: Position, b: Position) -> bool {
         macro_rules! check {
             (Pawn_y: $p:expr) => {
                 if $p.color == Color::Black {
@@ -152,11 +179,11 @@ impl Board {
                             && a.1.abs_diff(b.1) == 1)
                 }
                 PieceType::Rook => check!(Rook),
-                PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
+                PieceType::Knight => self.rel_posns(&[(1, 2), (2, 1)], a, b),
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
                 PieceType::King => {
-                    rel_posns!([(1, 1), (1, 0), (0, 1)]) && todo!("Don't put self in check")
+                    self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b) && todo!("Don't put self in check")
                 }
             }
         } else {
