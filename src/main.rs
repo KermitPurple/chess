@@ -146,17 +146,19 @@ impl Board {
             match p1.typ {
                 PieceType::Pawn => {
                     (a.0 == b.0 && check!(Pawn_y: p1))
-                        || (self.passant_killable
+                        || (self
+                            .passant_killable
                             .map(|x| x == (b.0, a.1))
-                            .unwrap_or(false) &&
-                            a.1.abs_diff(b.1) == 1
-                            )
-                },
+                            .unwrap_or(false)
+                            && a.1.abs_diff(b.1) == 1)
+                }
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
-                PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]) && todo!("Don't put self in check"),
+                PieceType::King => {
+                    rel_posns!([(1, 1), (1, 0), (0, 1)]) && todo!("Don't put self in check")
+                }
             }
         } else {
             false
@@ -258,18 +260,16 @@ mod tests {
             assert!(b.valid_move((x, 7), (x, 4))); // black moves without take
         }
         let b = Board {
-            board: [
-                [
-                    Some(Piece::new(Color::White, PieceType::Rook)),
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    Some(Piece::new(Color::Black, PieceType::Rook)),
-                ]; 8
-            ],
+            board: [[
+                Some(Piece::new(Color::White, PieceType::Rook)),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                Some(Piece::new(Color::Black, PieceType::Rook)),
+            ]; 8],
             ..Default::default()
         };
         // horizontal movement
@@ -430,18 +430,16 @@ mod tests {
         assert!(b.valid_move((1, 0), (7, 6))); // white moves without taking
         assert!(b.valid_move((1, 0), (4, 3))); // white moves without taking
         let b = Board {
-            board: [
-                [
-                    Some(Piece::new(Color::White, PieceType::Queen)),
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    Some(Piece::new(Color::Black, PieceType::Queen)),
-                ]; 8
-            ],
+            board: [[
+                Some(Piece::new(Color::White, PieceType::Queen)),
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                Some(Piece::new(Color::Black, PieceType::Queen)),
+            ]; 8],
             ..Default::default()
         };
         // Horizontal moves
@@ -456,25 +454,13 @@ mod tests {
     #[test]
     fn king_move_test() {
         let b = Board::new();
-        for pos in [
-            (3, 0),
-            (3, 1),
-            (4, 1),
-            (5, 1),
-            (5, 0),
-        ] {
+        for pos in [(3, 0), (3, 1), (4, 1), (5, 1), (5, 0)] {
             assert!(!b.valid_move(
                 (4, 0), // White King
                 pos
             ));
         }
-        for pos in [
-            (3, 7),
-            (3, 6),
-            (4, 6),
-            (5, 6),
-            (5, 7),
-        ] {
+        for pos in [(3, 7), (3, 6), (4, 6), (5, 6), (5, 7)] {
             assert!(!b.valid_move(
                 (4, 7), // Black King
                 pos
