@@ -314,7 +314,28 @@ mod tests {
 
     #[test]
     fn bishop_move_test() {
-        todo!();
+        let b = Board::new();
+        assert!(!b.valid_move((0, 0), (7, 7)));
+        assert!(!b.valid_move((0, 0), (4, 4)));
+        let b = Board {
+            board: [
+                [Some(Piece::new(Color::White, PieceType::Bishop)); 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [Some(Piece::new(Color::Black, PieceType::Bishop)); 8],
+            ],
+            ..Default::default()
+        };
+        assert!(b.valid_move((0, 0), (7, 7))); // white takes black
+        assert!(b.valid_move((7, 7), (0, 0))); // black takes white
+        assert!(b.valid_move((0, 0), (4, 4))); // white moves without taking
+        assert!(b.valid_move((7, 7), (4, 4))); // black moves without taking
+        assert!(b.valid_move((1, 0), (7, 6))); // white moves without taking
+        assert!(b.valid_move((1, 0), (4, 3))); // white moves without taking
     }
 
     #[test]
