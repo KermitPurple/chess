@@ -92,7 +92,8 @@ impl Board {
                     }
                 }
             }
-            panic!("Couln't find king!");
+            // cannot be in check with no king
+            return false;
         };
         for y in 0..8 {
             for x in 0..8 {
@@ -184,7 +185,7 @@ impl Board {
                     return a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1);
                 }
             }
-            match p1.typ {
+            (match p1.typ {
                 PieceType::Pawn => {
                     (a.0 == b.0 && check!(Pawn_y: p1))
                         || (self
@@ -197,17 +198,11 @@ impl Board {
                 PieceType::Knight => self.rel_posns(&[(1, 2), (2, 1)], a, b),
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
-                PieceType::King => {
-                    if self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b) {
-                        !self.test_move(a, b).in_check(p1.color)
-                    } else {
-                        false
-                    }
-                }
-            }
+                PieceType::King => self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b),
+            }) && !self.test_move(a, b).in_check(p1.color)
         } else {
             false
-        }
+        } 
     }
 }
 
