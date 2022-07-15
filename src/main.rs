@@ -1,12 +1,22 @@
 pub mod pieces;
 use pieces::*;
 
-#[derive(Default)]
 struct CastleRights {
     white_left: bool,
     white_right: bool,
     black_left: bool,
     black_right: bool,
+}
+
+impl Default for CastleRights {
+    fn default() -> Self {
+        Self {
+            white_left: true,
+            white_right: true,
+            black_left: true,
+            black_right: true,
+        }
+    }
 }
 
 #[derive(Default)]
@@ -49,6 +59,10 @@ impl Board {
             ],
             ..Default::default()
         }
+    }
+
+    fn valid_move(a: (usize, usize), b: (usize, usize)) -> bool {
+        todo!()
     }
 }
 
