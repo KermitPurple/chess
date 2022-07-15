@@ -9,7 +9,7 @@ pub enum PieceType {
     Knight,
     Bishop,
     Queen,
-    King
+    King,
 }
 
 impl fmt::Display for PieceType {
@@ -21,7 +21,7 @@ impl fmt::Display for PieceType {
             Knight => "K",
             Bishop => "B",
             Queen => "Q",
-            King => "K"
+            King => "K",
         };
         write!(f, "{}", s)
     }
@@ -30,7 +30,7 @@ impl fmt::Display for PieceType {
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum Color {
     Black,
-    White
+    White,
 }
 
 impl fmt::Display for Color {
@@ -48,7 +48,7 @@ impl fmt::Display for Color {
 #[derive(Copy, Clone)]
 pub struct Piece {
     pub color: Color,
-    pub typ: PieceType
+    pub typ: PieceType,
 }
 
 impl fmt::Display for Piece {
