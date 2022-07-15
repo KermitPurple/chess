@@ -152,6 +152,26 @@ mod tests {
             (6, 7), // Black right knight
             (5, 5), // Up two left one
         ));
+        assert!(b.valid_move(
+            (1, 0), // White left knight
+            (2, 2), // Down two right one
+        ));
+        assert!(b.valid_move(
+            (1, 0), // White left knight
+            (0, 2), // Down two left one
+        ));
+        assert!(b.valid_move(
+            (6, 0), // White right knight
+            (7, 2), // Down two right one
+        ));
+        assert!(b.valid_move(
+            (6, 0), // White right knight
+            (5, 2), // Down two left one
+        ));
+        assert!(!b.valid_move(
+            (1, 0), // White right knight
+            (3, 0), // Down two left one
+        ));
     }
  
     #[test]
