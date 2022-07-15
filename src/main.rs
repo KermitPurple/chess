@@ -87,7 +87,7 @@ impl Board {
                 a.0.abs_diff(b.0) == a.1.abs_diff(b.1) && todo!("Ensure no collisions")
             };
             (Queen) => {
-                check!(Rook) && check!(Bishop)
+                check!(Rook) || check!(Bishop)
             };
         }
         if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) || a == b {
