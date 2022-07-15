@@ -64,7 +64,7 @@ impl Board {
     fn valid_move(&self, a: (usize, usize), b: (usize, usize)) -> bool {
         macro_rules! rel_posns {
             ($list:expr) => {{
-                for (x, y) in [(1, 2), (2, 1)] {
+                for (x, y) in $list {
                     if (a.0 + x == b.0 && a.1 + y == b.1)
                         || (a.0.checked_sub(x).map(|n| n == b.0).unwrap_or(false)
                             && a.1.checked_sub(y).map(|n| n == b.1).unwrap_or(false))
