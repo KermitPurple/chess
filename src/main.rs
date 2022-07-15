@@ -89,10 +89,7 @@ impl Board {
                 (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
             };
             (Bishop) => {{
-                let diff = (
-                    a.0.abs_diff(b.0),
-                    a.1.abs_diff(b.1),
-                );
+                let diff = (a.0.abs_diff(b.0), a.1.abs_diff(b.1));
                 diff.0 == diff.1 && todo!("Ensure no collisions")
             }};
             (Queen) => {
@@ -108,9 +105,7 @@ impl Board {
                     return false;
                 }
                 match p1.typ {
-                    PieceType::Pawn => {
-                        a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1)
-                    }
+                    PieceType::Pawn => a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1),
                     PieceType::Rook => check!(Rook),
                     PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                     PieceType::Bishop => check!(Bishop),
@@ -119,9 +114,7 @@ impl Board {
                 }
             }
             (Some(p1), None) => match p1.typ {
-                PieceType::Pawn => {
-                    a.0 == b.0 && check!(Pawn_y: p1)
-                }
+                PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1),
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
