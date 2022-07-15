@@ -132,7 +132,7 @@ mod tests {
     fn rook_move_test() {
         todo!();
     }
- 
+
     #[test]
     fn knight_move_test() {
         let b = Board::new();
@@ -178,26 +178,44 @@ mod tests {
                 [None; 8],
                 [None; 8],
                 [None; 8],
-                [None, None, None, None, Some(Piece::new(Color::Black, PieceType::Knight)), None, None, None],
+                [
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::Knight)),
+                    None,
+                    None,
+                    None,
+                ],
                 [None; 8],
                 [None; 8],
                 [None; 8],
             ],
             ..Default::default()
         };
-        for pos in [(5, 6), (3, 6), (5, 2), (3, 2), (6, 5), (6, 3), (2, 5), (2, 3)] {
+        for pos in [
+            (5, 6),
+            (3, 6),
+            (5, 2),
+            (3, 2),
+            (6, 5),
+            (6, 3),
+            (2, 5),
+            (2, 3),
+        ] {
             assert!(b.valid_move(
                 (4, 4), // Knight in the center
                 pos
             ));
         }
     }
- 
+
     #[test]
     fn bishop_move_test() {
         todo!();
     }
- 
+
     #[test]
     fn queen_move_test() {
         todo!();
@@ -209,5 +227,4 @@ mod tests {
     }
 }
 
-fn main() {
-}
+fn main() {}
