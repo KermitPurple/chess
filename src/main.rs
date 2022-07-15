@@ -331,7 +331,9 @@ mod tests {
             ..Default::default()
         };
         assert!(b.valid_move((0, 0), (7, 7))); // white takes black
+        assert!(b.valid_move((7, 0), (0, 7))); // white takes black
         assert!(b.valid_move((7, 7), (0, 0))); // black takes white
+        assert!(b.valid_move((0, 7), (7, 0))); // black takes white
         assert!(b.valid_move((0, 0), (4, 4))); // white moves without taking
         assert!(b.valid_move((7, 7), (4, 4))); // black moves without taking
         assert!(b.valid_move((1, 0), (7, 6))); // white moves without taking
@@ -345,7 +347,32 @@ mod tests {
 
     #[test]
     fn king_move_test() {
-        todo!();
+        let b = Board::new();
+        for pos in [
+            (3, 0),
+            (3, 1),
+            (4, 1),
+            (5, 1),
+            (5, 0),
+        ] {
+            assert!(!b.valid_move(
+                (4, 0), // White King
+                pos
+            ));
+        }
+        for pos in [
+            (3, 7),
+            (3, 6),
+            (4, 6),
+            (5, 6),
+            (5, 7),
+        ] {
+            assert!(!b.valid_move(
+                (4, 7), // Black King
+                pos
+            ));
+        }
+        // TODO more extensive tests
     }
 }
 
