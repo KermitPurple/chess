@@ -109,7 +109,22 @@ impl Board {
                 }
             };
             (Bishop) => {
-                a.0.abs_diff(b.0) == a.1.abs_diff(b.1) && todo!("Ensure no collisions")
+                if a.0.abs_diff(b.0) == a.1.abs_diff(b.1) {
+                    let mut curr = (a.0.min(b.0) + 1, a.1.min(b.1) + 1);
+                    let end = (a.0.max(b.0), a.1.max(b.1));
+                    loop {
+                        if curr >= end {
+                            break true;
+                        }
+                        if self.board[curr.1][curr.0].is_some() {
+                            break false;
+                        }
+                        curr.0 += 1;
+                        curr.1 += 1;
+                    }
+                } else {
+                    false
+                }
             };
             (Queen) => {
                 check!(Rook) || check!(Bishop)
