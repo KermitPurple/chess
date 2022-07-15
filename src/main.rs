@@ -88,10 +88,9 @@ impl Board {
             (Rook) => {
                 (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
             };
-            (Bishop) => {{
-                let diff = (a.0.abs_diff(b.0), a.1.abs_diff(b.1));
-                diff.0 == diff.1 && todo!("Ensure no collisions")
-            }};
+            (Bishop) => {
+                a.0.abs_diff(b.0) == a.1.abs_diff(b.1) && todo!("Ensure no collisions")
+            };
             (Queen) => {
                 check!(Rook) && check!(Bishop)
             };
