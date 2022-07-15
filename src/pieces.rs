@@ -2,7 +2,7 @@ use std::fmt;
 
 const RESET_COLOR: &str = "\x1b[0m";
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub enum PieceType {
     Pawn,
     Rook,

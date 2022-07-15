@@ -90,32 +90,30 @@ impl Board {
                 check!(Rook) && check!(Bishop)
             };
         }
-        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) {
+        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) || a == b {
             return false;
         }
-        match (self.board[a.1][a.0], self.board[b.1][b.0]) {
-            (Some(p1), Some(p2)) => {
+        if let Some(p1) = self.board[a.1][a.0] {
+            if let Some(p2) = self.board[b.1][b.0] {
                 if p1.color == p2.color {
                     return false;
                 }
-                match p1.typ {
-                    PieceType::Pawn => a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1),
-                    PieceType::Rook => check!(Rook),
-                    PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
-                    PieceType::Bishop => check!(Bishop),
-                    PieceType::Queen => check!(Queen),
-                    PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]),
+                if p1.typ == PieceType::Pawn {
+                    if a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1) {
+                        return true;
+                    }
                 }
             }
-            (Some(p1), None) => match p1.typ {
+            match p1.typ {
                 PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1) && todo!("The possant thing"),
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
                 PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]),
-            },
-            _ => false,
+            }
+        } else {
+            false
         }
     }
 }
