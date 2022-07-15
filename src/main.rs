@@ -342,7 +342,68 @@ mod tests {
 
     #[test]
     fn queen_move_test() {
-        todo!();
+        let b = Board::new();
+        // moving vertically thru peices
+        assert!(!b.valid_move((3, 0), (3, 7)));
+        assert!(!b.valid_move((3, 7), (3, 0)));
+        // moving diagonally thru peices
+        assert!(!b.valid_move((3, 0), (7, 4)));
+        assert!(!b.valid_move((3, 0), (0, 3)));
+        // move horizontally thru peices
+        assert!(!b.valid_move((3, 0), (3, 3))); // try to move thru piece on same team
+        assert!(!b.valid_move((3, 0), (3, 7))); // try to move thru pieces of multiple colors
+        assert!(!b.valid_move((3, 0), (0, 0))); // try to move thru pieces on same team
+        let b = Board {
+            board: [
+                [Some(Piece::new(Color::White, PieceType::Queen)); 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [Some(Piece::new(Color::Black, PieceType::Queen)); 8],
+            ],
+            ..Default::default()
+        };
+        // vertical moves
+        for x in 0..8 {
+            assert!(b.valid_move((x, 0), (x, 7))); // white takes black
+            assert!(b.valid_move((x, 0), (x, 4))); // white moves without take
+            assert!(b.valid_move((x, 7), (x, 0))); // black takes white
+            assert!(b.valid_move((x, 7), (x, 4))); // black moves without take
+        }
+        // diagonal moves
+        assert!(b.valid_move((0, 0), (7, 7))); // white takes black
+        assert!(b.valid_move((7, 0), (0, 7))); // white takes black
+        assert!(b.valid_move((7, 7), (0, 0))); // black takes white
+        assert!(b.valid_move((0, 7), (7, 0))); // black takes white
+        assert!(b.valid_move((0, 0), (4, 4))); // white moves without taking
+        assert!(b.valid_move((7, 7), (4, 4))); // black moves without taking
+        assert!(b.valid_move((1, 0), (7, 6))); // white moves without taking
+        assert!(b.valid_move((1, 0), (4, 3))); // white moves without taking
+        let b = Board {
+            board: [
+                [
+                    Some(Piece::new(Color::White, PieceType::Queen)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::Queen)),
+                ]; 8
+            ],
+            ..Default::default()
+        };
+        // Horizontal moves
+        for y in 0..8 {
+            assert!(b.valid_move((0, y), (7, y))); // white takes black
+            assert!(b.valid_move((0, y), (4, y))); // white moves without take
+            assert!(b.valid_move((7, y), (0, y))); // black takes white
+            assert!(b.valid_move((7, y), (4, y))); // black moves without take
+        }
     }
 
     #[test]
