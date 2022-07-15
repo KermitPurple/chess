@@ -61,8 +61,56 @@ impl Board {
         }
     }
 
-    fn valid_move(a: (usize, usize), b: (usize, usize)) -> bool {
-        todo!()
+    fn valid_move(&self, a: (usize, usize), b: (usize, usize)) -> bool {
+        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) {
+            return false;
+        }
+        match (self.board[a.1][a.0], self.board[b.1][b.0]) {
+            (Some(p1), Some(p2)) => {
+                if p1.color == p2.color {
+                    return false;
+                }
+                todo!()
+            }
+            (Some(p), None) => {
+                match p.typ {
+                    PieceType::Pawn => {
+                        let correct_y = if p.color == Color::Black {
+                            a.1 + 1 == b.1
+                        } else {
+                            a.1
+                                .checked_sub(1)
+                                .map(|x| x == b.1)
+                                .unwrap_or(false)
+                        };
+                        a.0 == b.0 && correct_y
+                    }
+                    PieceType::Rook => { 
+                        (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
+                    }
+                    PieceType::Knight => {
+                        for (x, y) in [(1, 2), (2, 1)] {
+                            if (a.0 + x == b.0 
+                                && a.1 + y == b.1)
+                                || (a.0.checked_sub(x)
+                                    .map(|n| n == b.0)
+                                    .unwrap_or(false)
+                                && a.1.checked_sub(y)
+                                    .map(|n| n == b.1)
+                                    .unwrap_or(false))
+                            {
+                                return true;
+                            }
+                        }
+                        false
+                    }
+                    PieceType::Bishop => { todo!() }
+                    PieceType::Queen => { todo!() }
+                    PieceType::King => { todo!() }
+                }
+            }
+            _ => false
+        }
     }
 }
 

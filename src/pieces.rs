@@ -27,7 +27,7 @@ impl fmt::Display for PieceType {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub enum Color {
     Black,
     White
