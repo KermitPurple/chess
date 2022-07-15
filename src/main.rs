@@ -104,9 +104,7 @@ impl Board {
                     return false;
                 }
                 if p1.typ == PieceType::Pawn {
-                    if a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1) {
-                        return true;
-                    }
+                    return a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1);
                 }
             }
             match p1.typ {
@@ -136,6 +134,30 @@ mod tests {
             assert!(b.valid_move((x, 6), (x, 5)));
             assert!(b.valid_move((x, 6), (x, 4)));
         }
+        let b = Board {
+            board: [
+                [Some(Piece::new(Color::White, PieceType::Pawn)); 8],
+                [Some(Piece::new(Color::Black, PieceType::Pawn)); 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            ..Default::default()
+        };
+        for x in 0..8 {
+            assert!(!b.valid_move((x, 0), (x, 1))); // move white to black
+            assert!(!b.valid_move((x, 1), (x, 0))); // move black to white
+        }
+        for x in 0..7 {
+            assert!(b.valid_move((x, 0), (x + 1, 1))); // move white to black Diagonally
+            assert!(b.valid_move((x, 1), (x + 1, 0))); // move black to white Diagonally
+            assert!(b.valid_move((x + 1, 0), (x, 1))); // move white to black Diagonally
+            assert!(b.valid_move((x + 1, 1), (x, 0))); // move black to white Diagonally
+        }
+        // TODO test for passant
     }
 
     #[test]
