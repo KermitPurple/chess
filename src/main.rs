@@ -78,13 +78,20 @@ impl Board {
             }};
         }
         macro_rules! check {
+            (Pawn_y: $p:expr) => {
+                if $p.color == Color::Black {
+                    a.1 + 1 == b.1
+                } else {
+                    a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false)
+                }
+            };
             (Rook) => {
                 (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
             };
             (Bishop) => {{
                 let diff = (
-                    if a.0 > b.0 { a.0 - b.0 } else { b.0 - a.0 },
-                    if a.1 > b.1 { a.1 - b.1 } else { b.1 - a.1 },
+                    a.0.abs_diff(b.0),
+                    a.1.abs_diff(b.1),
                 );
                 diff.0 == diff.1 && todo!("Ensure no collisions")
             }};
@@ -100,16 +107,20 @@ impl Board {
                 if p1.color == p2.color {
                     return false;
                 }
-                todo!("Capturing peices")
+                match p1.typ {
+                    PieceType::Pawn => {
+                        a.0.abs_diff(b.0) == 1 && check!(Pawn_y: p1)
+                    }
+                    PieceType::Rook => check!(Rook),
+                    PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
+                    PieceType::Bishop => check!(Bishop),
+                    PieceType::Queen => check!(Queen),
+                    PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]),
+                }
             }
-            (Some(p), None) => match p.typ {
+            (Some(p1), None) => match p1.typ {
                 PieceType::Pawn => {
-                    let correct_y = if p.color == Color::Black {
-                        a.1 + 1 == b.1
-                    } else {
-                        a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false)
-                    };
-                    a.0 == b.0 && correct_y
+                    a.0 == b.0 && check!(Pawn_y: p1)
                 }
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
