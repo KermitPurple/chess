@@ -77,12 +77,8 @@ impl Board {
     }
 
     fn in_check(&self, color: Color) -> bool {
-        let range = match color {
-            Color::Black => 0..=7,
-            Color::White => 7..=0,
-        };
         let king = 'outer: loop {
-            for y in range {
+            for y in 0..8 {
                 for x in 0..8 {
                     if matches!(
                         self.board[y][x],
@@ -568,12 +564,34 @@ mod tests {
         assert!(b.valid_move((1, 0), (0, 0)));
         assert!(b.valid_move((1, 0), (0, 1)));
         assert!(!b.valid_move((1, 0), (1, 1)));
-        // TODO more extensive tests
     }
 
     #[test]
-    fn in_check_test(){
-        todo!();
+    fn in_check_test() {
+        let b = Board {
+            board: [
+                [
+                    Some(Piece::new(Color::White, PieceType::King)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::Queen)),
+                    Some(Piece::new(Color::Black, PieceType::King)),
+                ],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            ..Default::default()
+        };
+        assert!(b.in_check(Color::White));
+        assert!(!b.in_check(Color::Black));
     }
 }
 
