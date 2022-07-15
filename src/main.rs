@@ -62,15 +62,46 @@ impl Board {
     }
 
     fn valid_move(&self, a: (usize, usize), b: (usize, usize)) -> bool {
-        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) {
-            return false;
+        macro_rules! rel_posns {
+            ($list:expr) => ({
+                for (x, y) in [(1, 2), (2, 1)] {
+                    if (a.0 + x == b.0 && a.1 + y == b.1)
+                        || (a.0.checked_sub(x).map(|n| n == b.0).unwrap_or(false)
+                            && a.1.checked_sub(y).map(|n| n == b.1).unwrap_or(false))
+                    {
+                        return true;
+                    }
+                }
+                false
+            })
+        }
+        macro_rules! check {
+            (Rook) => ((a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions"));
+            (Bishop) => ({
+                let diff = (
+                    if a.0 > b.0 {
+                        a.0 - b.0
+                    } else {
+                        b.0 - a.0 
+                    },
+                    if a.1 > b.1 {
+                        a.1 - b.1
+                    } else {
+                        b.1 - a.1 
+                    }
+                    );
+                diff.0 == diff.1 && todo!("Ensure no collisions")
+            });
+            (Queen) => (check!(Rook) && check!(Bishop));
+        }
+        if [a.0, a.1, b.0, b.1].into_iter().any(|x| x >= 8) { return false;
         }
         match (self.board[a.1][a.0], self.board[b.1][b.0]) {
             (Some(p1), Some(p2)) => {
                 if p1.color == p2.color {
                     return false;
                 }
-                todo!()
+                todo!("Capturing peices")
             }
             (Some(p), None) => match p.typ {
                 PieceType::Pawn => {
@@ -81,21 +112,11 @@ impl Board {
                     };
                     a.0 == b.0 && correct_y
                 }
-                PieceType::Rook => (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions"),
-                PieceType::Knight => {
-                    for (x, y) in [(1, 2), (2, 1)] {
-                        if (a.0 + x == b.0 && a.1 + y == b.1)
-                            || (a.0.checked_sub(x).map(|n| n == b.0).unwrap_or(false)
-                                && a.1.checked_sub(y).map(|n| n == b.1).unwrap_or(false))
-                        {
-                            return true;
-                        }
-                    }
-                    false
-                }
-                PieceType::Bishop => todo!(),
-                PieceType::Queen => todo!(),
-                PieceType::King => todo!(),
+                PieceType::Rook => check!(Rook),
+                PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
+                PieceType::Bishop => check!(Bishop),
+                PieceType::Queen => check!(Queen),
+                PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]),
             },
             _ => false,
         }
