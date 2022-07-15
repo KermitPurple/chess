@@ -1,3 +1,4 @@
+// TODO check_maker and check_freeer
 pub mod pieces;
 use pieces::*;
 
@@ -62,6 +63,17 @@ impl Board {
             ],
             ..Default::default()
         }
+    }
+
+    fn test_move(&self, a: Position, b: Position) -> Self {
+        let mut board = *self;
+        board.make_move(a, b);
+        board
+    }
+
+    fn make_move(&mut self, a: Position, b: Position) {
+        let p = self.board[a.1][a.0].take();
+        self.board[b.1][b.0] = p;
     }
 
     fn in_check(&self, color: Color) -> bool {
@@ -187,10 +199,7 @@ impl Board {
                 PieceType::Queen => check!(Queen),
                 PieceType::King => {
                     if self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b) {
-                        let mut brd = *self;
-                        brd.board[a.1][a.0].take();
-                        brd.board[b.1][b.0] = Some(p1);
-                        !brd.in_check(p1.color)
+                        !self.test_move(a, b).in_check(p1.color)
                     } else {
                         false
                     }
