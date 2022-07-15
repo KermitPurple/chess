@@ -77,7 +77,7 @@ impl Board {
         macro_rules! check {
             (Pawn_y: $p:expr) => {
                 if $p.color == Color::Black {
-                    a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false) // TODO maybe just: a.1 == b.1 + 1
+                    a.1 == b.1 + 1
                         // check for two spot jump
                         || (a.1 == 6 && b.1 == 4 && self.board[5][a.0].is_none())
                 } else {
