@@ -67,7 +67,9 @@ impl Board {
         /// Given a list of relative positions check if the move to be checked is one of those positions
         macro_rules! rel_posns {
             ($list:expr) => {{
-                ($list).iter().any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1) ))
+                ($list)
+                    .iter()
+                    .any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1)))
             }};
         }
         macro_rules! check {
