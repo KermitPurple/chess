@@ -433,6 +433,43 @@ mod tests {
                 pos
             ));
         }
+        let b = Board {
+            board: [
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::King)),
+                    None,
+                    None,
+                    None,
+                ],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            ..Default::default()
+        };
+        for pos in [
+            (4, 5),
+            (5, 5),
+            (5, 4),
+            (5, 3),
+            (4, 3),
+            (3, 3),
+            (3, 4),
+            (3, 5),
+        ] {
+            assert!(b.valid_move(
+                (4, 4), // King in center
+                pos
+            ));
+        }
         // TODO more extensive tests
     }
 }
