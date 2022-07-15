@@ -84,7 +84,12 @@ impl Board {
         };
         for y in 0..8 {
             for x in 0..8 {
-                if self.valid_move((x, y), king) {
+                if matches!(
+                    self.board[y][x],
+                    Some(Piece { color: c, ..}) if color != c
+                    )
+                    && self.valid_move((x, y), king)
+                {
                     return true;
                 }
             }
