@@ -108,6 +108,7 @@ impl Board {
                 }
             }
             match p1.typ {
+                // TODO do passant stuff
                 PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1),
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
