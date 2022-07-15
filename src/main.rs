@@ -70,7 +70,6 @@ impl Board {
             ($list:expr) => {
                 ($list)
                     .iter()
-                    // TODO ask pj if this gets optimized
                     .any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1)))
             };
         }
