@@ -2,6 +2,7 @@ use std::fmt;
 
 const RESET_COLOR: &str = "\x1b[0m";
 
+#[derive(Copy, Clone)]
 pub enum PieceType {
     Pawn,
     Rook,
@@ -26,14 +27,15 @@ impl fmt::Display for PieceType {
     }
 }
 
-pub enum PieceTeam {
+#[derive(Copy, Clone)]
+pub enum Color {
     Black,
     White
 }
 
-impl fmt::Display for PieceTeam {
+impl fmt::Display for Color {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use PieceTeam::*;
+        use Color::*;
         // TODO probably choose better background colors
         let s = match self {
             Black => "\x1b[30;107m",
@@ -43,13 +45,20 @@ impl fmt::Display for PieceTeam {
     }
 }
 
+#[derive(Copy, Clone)]
 pub struct Piece {
-    pub team: PieceTeam,
+    pub color: Color,
     pub typ: PieceType
 }
 
 impl fmt::Display for Piece {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}{}{}", self.team, self.typ, RESET_COLOR)
+        write!(f, "{}{}{}", self.color, self.typ, RESET_COLOR)
+    }
+}
+
+impl Piece {
+    pub fn new(color: Color, typ: PieceType) -> Self {
+        Self { color, typ }
     }
 }
