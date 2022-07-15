@@ -76,13 +76,13 @@ impl Board {
         macro_rules! check {
             (Pawn_y: $p:expr) => {
                 if $p.color == Color::Black {
-                    a.1 + 1 == b.1
-                        // check for two spot jump
-                        || (a.1 == 6 && b.1 == 4 && self.board[a.0][5].is_none())
-                } else {
                     a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false)
                         // check for two spot jump
-                        || (a.1 == 1 && b.1 == 3 && self.board[a.0][2].is_none())
+                        || (a.1 == 6 && b.1 == 4 && self.board[5][a.0].is_none())
+                } else {
+                    a.1 + 1 == b.1
+                        // check for two spot jump
+                        || (a.1 == 1 && b.1 == 3 && self.board[2][a.0].is_none())
                 }
             };
             (Rook) => {
@@ -110,7 +110,7 @@ impl Board {
                 }
             }
             match p1.typ {
-                PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1) && todo!("The possant thing"),
+                PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1),
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
@@ -129,7 +129,13 @@ mod tests {
 
     #[test]
     fn pawn_move_test() {
-        todo!();
+        let b = Board::new();
+        for x in 0..8 {
+            assert!(b.valid_move((x, 1), (x, 2)));
+            assert!(b.valid_move((x, 1), (x, 3)));
+            assert!(b.valid_move((x, 6), (x, 5)));
+            assert!(b.valid_move((x, 6), (x, 4)));
+        }
     }
 
     #[test]
