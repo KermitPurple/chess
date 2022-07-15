@@ -198,7 +198,7 @@ impl Board {
             }) && !self.test_move(a, b).in_check(p1.color)
         } else {
             false
-        } 
+        }
     }
 }
 
