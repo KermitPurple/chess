@@ -86,7 +86,27 @@ impl Board {
                 }
             };
             (Rook) => {
-                (a.0 == b.0 || a.1 == b.1) && todo!("Ensure no collisions")
+                if a.0 == b.0 {
+                    let range = if a.1 > b.1 {
+                        b.1 + 1..a.1
+                    } else {
+                        a.1 + 1..b.1
+                    };
+                    self.board[range]
+                        .iter()
+                        .all(|x| x[a.0].is_none())
+                } else if a.1 == b.1 {
+                    let range = if a.0 > b.0 {
+                        b.0 + 1..a.0
+                    } else {
+                        a.0 + 1..b.0
+                    };
+                    self.board[a.1][range]
+                        .iter()
+                        .all(|x| x.is_none())
+                } else {
+                    false
+                }
             };
             (Bishop) => {
                 a.0.abs_diff(b.0) == a.1.abs_diff(b.1) && todo!("Ensure no collisions")
@@ -163,7 +183,55 @@ mod tests {
 
     #[test]
     fn rook_move_test() {
-        todo!();
+        let b = Board::new();
+        assert!(!b.valid_move((0, 0), (0, 3))); // Try to move thru piece on same team
+        assert!(!b.valid_move((0, 0), (0, 7))); // Try to move thru pieces of multiple colors
+        assert!(!b.valid_move((0, 0), (3, 0))); // Try to move thru pieces on same team
+        assert!(!b.valid_move((7, 0), (7, 3))); // Try to move thru piece
+        assert!(!b.valid_move((7, 0), (7, 7))); // Try to move thru pieces of multiple colors
+        assert!(!b.valid_move((7, 0), (3, 0))); // Try to move thru pieces on same team
+        let b = Board {
+            board: [
+                [Some(Piece::new(Color::White, PieceType::Rook)); 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [Some(Piece::new(Color::Black, PieceType::Rook)); 8],
+            ],
+            ..Default::default()
+        };
+        // vertical movement
+        for x in 0..8 {
+            assert!(b.valid_move((x, 0), (x, 7))); // white takes black
+            assert!(b.valid_move((x, 0), (x, 4))); // white moves without take
+            assert!(b.valid_move((x, 7), (x, 0))); // black takes white
+            assert!(b.valid_move((x, 7), (x, 4))); // black moves without take
+        }
+        let b = Board {
+            board: [
+                [
+                    Some(Piece::new(Color::White, PieceType::Rook)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(Piece::new(Color::Black, PieceType::Rook)),
+                ]; 8
+            ],
+            ..Default::default()
+        };
+        // horizontal movement
+        for y in 0..8 {
+            assert!(b.valid_move((0, y), (7, y))); // white takes black
+            assert!(b.valid_move((0, y), (4, y))); // white moves without take
+            assert!(b.valid_move((7, y), (0, y))); // black takes white
+            assert!(b.valid_move((7, y), (4, y))); // black moves without take
+        }
     }
 
     #[test]
