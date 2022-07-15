@@ -111,7 +111,7 @@ impl Board {
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
-                PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]),
+                PieceType::King => rel_posns!([(1, 1), (1, 0), (0, 1)]) && todo!("Don't put self in check"),
             }
         } else {
             false
