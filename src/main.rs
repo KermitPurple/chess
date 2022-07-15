@@ -186,8 +186,14 @@ impl Board {
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
                 PieceType::King => {
-                    self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b)
-                        && todo!("Don't put self in check")
+                    if self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b) {
+                        let mut brd = *self;
+                        brd.board[a.1][a.0].take();
+                        brd.board[b.1][b.0] = Some(p1);
+                        !brd.in_check(p1.color)
+                    } else {
+                        false
+                    }
                 }
             }
         } else {
@@ -533,7 +539,37 @@ mod tests {
                 pos
             ));
         }
+        let b = Board {
+            board: [
+                [
+                    Some(Piece::new(Color::White, PieceType::Bishop)),
+                    Some(Piece::new(Color::Black, PieceType::King)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                ],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            ..Default::default()
+        };
+        assert!(b.valid_move((1, 0), (0, 0)));
+        assert!(b.valid_move((1, 0), (0, 1)));
+        assert!(!b.valid_move((1, 0), (1, 1)));
         // TODO more extensive tests
+    }
+
+    #[test]
+    fn in_check_test(){
+        todo!();
     }
 }
 
