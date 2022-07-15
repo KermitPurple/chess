@@ -77,8 +77,12 @@ impl Board {
             (Pawn_y: $p:expr) => {
                 if $p.color == Color::Black {
                     a.1 + 1 == b.1
+                        // check for two spot jump
+                        || (a.1 == 6 && b.1 == 4 && self.board[a.0][5].is_none())
                 } else {
                     a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false)
+                        // check for two spot jump
+                        || (a.1 == 1 && b.1 == 3 && self.board[a.0][2].is_none())
                 }
             };
             (Rook) => {
