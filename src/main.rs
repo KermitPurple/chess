@@ -3,6 +3,7 @@ use pieces::*;
 
 type Position = (usize, usize);
 
+#[derive(Copy, Clone)]
 struct CastleRights {
     white_left: bool,
     white_right: bool,
@@ -21,7 +22,7 @@ impl Default for CastleRights {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Copy, Clone)]
 struct Board {
     board: [[Option<Piece>; 8]; 8],
     passant_killable: Option<Position>,
@@ -118,6 +119,48 @@ impl Board {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn pawn_move_test() {
+        todo!();
+    }
+
+    #[test]
+    fn rook_move_test() {
+        todo!();
+    }
+ 
+    #[test]
+    fn knight_move_test() {
+        let b = Board::new();
+        assert!(b.valid_move(
+            (1, 7), // Black left knight
+            (2, 5), // Up two right 1
+        ));
+        assert!(b.valid_move(
+            (1, 7), // Black left knight
+            (0, 5), // Up two right 1
+        ));
+    }
+ 
+    #[test]
+    fn bishop_move_test() {
+        todo!();
+    }
+ 
+    #[test]
+    fn queen_move_test() {
+        todo!();
+    }
+
+    #[test]
+    fn king_move_test() {
+        todo!();
+    }
+}
+
 fn main() {
-    let board = Board::new();
 }
