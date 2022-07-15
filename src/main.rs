@@ -64,17 +64,10 @@ impl Board {
     }
 
     fn valid_move(&self, a: Position, b: Position) -> bool {
+        /// Given a list of relative positions check if the move to be checked is one of those positions
         macro_rules! rel_posns {
             ($list:expr) => {{
-                for (x, y) in $list {
-                    if (a.0 + x == b.0 && a.1 + y == b.1)
-                        || (a.0.checked_sub(x).map(|n| n == b.0).unwrap_or(false)
-                            && a.1.checked_sub(y).map(|n| n == b.1).unwrap_or(false))
-                    {
-                        return true;
-                    }
-                }
-                false
+                ($list).iter().any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1) ))
             }};
         }
         macro_rules! check {
