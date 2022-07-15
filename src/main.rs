@@ -77,7 +77,7 @@ impl Board {
         macro_rules! check {
             (Pawn_y: $p:expr) => {
                 if $p.color == Color::Black {
-                    a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false)
+                    a.1.checked_sub(1).map(|x| x == b.1).unwrap_or(false) // TODO maybe just: a.1 == b.1 + 1
                         // check for two spot jump
                         || (a.1 == 6 && b.1 == 4 && self.board[5][a.0].is_none())
                 } else {
@@ -144,8 +144,14 @@ impl Board {
                 }
             }
             match p1.typ {
-                // TODO do passant stuff
-                PieceType::Pawn => a.0 == b.0 && check!(Pawn_y: p1),
+                PieceType::Pawn => {
+                    (a.0 == b.0 && check!(Pawn_y: p1))
+                        || (self.passant_killable
+                            .map(|x| x == (b.0, a.1))
+                            .unwrap_or(false) &&
+                            a.1.abs_diff(b.1) == 1
+                            )
+                },
                 PieceType::Rook => check!(Rook),
                 PieceType::Knight => rel_posns!([(1, 2), (2, 1)]),
                 PieceType::Bishop => check!(Bishop),
@@ -194,7 +200,32 @@ mod tests {
             assert!(b.valid_move((x + 1, 0), (x, 1))); // move white to black Diagonally
             assert!(b.valid_move((x + 1, 1), (x, 0))); // move black to white Diagonally
         }
-        // TODO test for passant
+        let b = Board {
+            board: [
+                [None; 8],
+                [
+                    Some(Piece::new(Color::White, PieceType::Pawn)),
+                    Some(Piece::new(Color::Black, PieceType::Pawn)),
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                ],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+                [None; 8],
+            ],
+            passant_killable: Some((0, 1)),
+            ..Default::default()
+        };
+        assert!(b.valid_move((1, 1), (1, 0)));
+        assert!(b.valid_move((1, 1), (0, 0)));
+        assert!(!b.valid_move((1, 1), (2, 0)));
     }
 
     #[test]
