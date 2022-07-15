@@ -85,22 +85,20 @@ impl Board {
         for y in 0..8 {
             for x in 0..8 {
                 if matches!(
-                    self.board[y][x],
-                    Some(Piece { color: c, ..}) if color != c
-                    )
-                    && self.valid_move((x, y), king)
+                self.board[y][x],
+                Some(Piece { color: c, ..}) if color != c
+                ) && self.valid_move((x, y), king)
                 {
                     return true;
                 }
             }
         }
         false
-    } 
+    }
 
     /// Given a list of relative positions check if the move to be checked is one of those positions
     fn rel_posns(self, list: &[Position], a: Position, b: Position) -> bool {
-        list
-            .iter()
+        list.iter()
             .any(|&x| x == (a.0.abs_diff(b.0), a.1.abs_diff(b.1)))
     }
 
@@ -188,7 +186,8 @@ impl Board {
                 PieceType::Bishop => check!(Bishop),
                 PieceType::Queen => check!(Queen),
                 PieceType::King => {
-                    self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b) && todo!("Don't put self in check")
+                    self.rel_posns(&[(1, 1), (1, 0), (0, 1)], a, b)
+                        && todo!("Don't put self in check")
                 }
             }
         } else {
