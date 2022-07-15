@@ -1,6 +1,8 @@
 pub mod pieces;
 use pieces::*;
 
+type Position = (usize, usize);
+
 struct CastleRights {
     white_left: bool,
     white_right: bool,
@@ -22,7 +24,7 @@ impl Default for CastleRights {
 #[derive(Default)]
 struct Board {
     board: [[Option<Piece>; 8]; 8],
-    passant_killable: Option<(u8, u8)>,
+    passant_killable: Option<Position>,
     castle_rights: CastleRights,
 }
 
@@ -61,7 +63,7 @@ impl Board {
         }
     }
 
-    fn valid_move(&self, a: (usize, usize), b: (usize, usize)) -> bool {
+    fn valid_move(&self, a: Position, b: Position) -> bool {
         macro_rules! rel_posns {
             ($list:expr) => {{
                 for (x, y) in $list {
