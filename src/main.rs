@@ -3,6 +3,7 @@ use pieces::*;
 
 type Position = (usize, usize);
 
+// TODO handle castling
 #[derive(Copy, Clone)]
 struct CastleRights {
     white_left: bool,
